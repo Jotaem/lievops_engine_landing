@@ -97,29 +97,38 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-                /* Estilos Stack Flow Carrusel */
+        /* LÓGICA DE CARRUSEL INFINITO */
         @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
+        .carousel-wrapper { width: 100%; overflow: hidden; }
         .stack-carousel {
             display: flex;
-            width: 200%;
-            animation: scroll 20s linear infinite;
+            width: max-content;
+            animation: scroll 40s linear infinite;
         }
+        .stack-carousel:hover { animation-play-state: paused; }
         .stack-item {
             flex: 0 0 auto;
-            width: 200px;
+            width: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
         .arrow-flow {
+            flex: 0 0 auto;
             color: #E21B23;
+            font-size: 24px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
             animation: pulse 1.5s infinite;
         }
+
         @keyframes pulse {
             0% { opacity: 0.3; transform: translateX(-5px); }
             50% { opacity: 1; transform: translateX(5px); }
@@ -523,8 +532,9 @@
                 bullets: [
                     "Paneles Principales: Reporting, Stagnant y DAS.",
                     "Herramientas: Dashboard personalizable de enlaces tácticos.",
-                    "Schedulers: Control de ejecución automática (15-30-60 min).",
-                    "Personalización: Exclusión dinámica de ciudades en tiempo real."
+                    "Schedulers: Control de ejecución automática (Dual o 15-30-60 min).",
+                    "Rider Care: Exclusión dinámica de ciudades en tiempo real y no tocar ciudades que requieran una revisión manual caso a caso (paro)",
+                    "Configuración: Login de usuario, feedback auditivo, seteo de canales y umbrales."
                 ],
                 image: "stack/interfaz.gif"
             },
@@ -579,7 +589,7 @@
             "Punto de Inflexión: Se aumenta umbral de autocomplete en órdenes con PIN a 180 min (vs 20 min las que no tienen PIN), crecen las stagnant en near dropoff y afectación operacional a nivel país.",
             "Estrés Crítico: Dotación completa y capacidad humana estresada por foco en órdenes stagnant + multitarea operativa intensa.",
             "Estrés Crítico: Dotación completa y capacidad humana estresada por multitarea, exige reestructuración de flujos y prioridades, para liberar capacidad para gestión de órdenes Stagnant.", 
-            "Fase Experimental: Se integra data live para detección temprana. Comienza el desarrollo del Engine en fase testing gestionando stagnant en NDO.",
+            "Fase Experimental: Se integra data live para detección temprana. Comienza el desarrollo del Engine en fase testing gestionando stagnant en NDO. Se gestionan +5.1k órdenes con un FR de 0.1% (Bajo riesgo).",
             "Ajuste Estratégico: Business Case de agosto permite que Regional ajuste umbral de 180 a 40 min (2da semana): Stagnant en NDO desaparecen (0%). Automatización 54%.",
             "Gestión Proactiva: Implementación de gestión autonoma \"Scheduler\" cada 15 min. Transición a gestión proactiva permite superar las 10 mil órdenes gestionadas con share de automatización del 72%.",
             "Escalabilidad Real: Se ajusta umbral de gestión de \"Stagnant Accepted\" a >20 min. Automatización alcanza el 82% sobre un volumen masivo de 15 mil órdenes.",
