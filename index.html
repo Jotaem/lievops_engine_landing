@@ -358,6 +358,12 @@
             border-color: #cbd5e1;
         }
 
+        /* LÓGICA DE MATRIZ */
+        .logic-table th { background-color: #f8fafc; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; padding: 12px; color: #64748b; font-weight: 800; }
+        .logic-table td { padding: 12px; font-size: 11px; border-bottom: 1px solid #f1f5f9; }
+        .check-icon { color: #10b981; font-weight: bold; }
+        .cross-icon { color: #cbd5e1; }
+
     </style>
 </head>
 <body class="p-10">
@@ -698,7 +704,164 @@
             </div>
         </div>
 
-                    <!-- FOOTER EJECUTIVO -->
+        <!-- NUEVA SECCIÓN: MATRIZ DE DECISIÓN Y LÓGICA -->
+            <div class="mt-20">
+                <div class="flex justify-between items-end mb-10 border-b pb-6">
+                    <div>
+                        <h1 class="text-4xl font-800 tracking-tighter">Lógica de Gestión <span class="peya-red">Stagnant</span></h1>
+                        <p class="text-slate-500 uppercase text-xs font-bold tracking-[0.2em] mt-2">Matriz de Decisión y Protocolos de Acción | Analytics Deep-Dive</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                    <!-- MATRIZ DE DECISIÓN -->
+                    <div class="md:col-span-2 card overflow-x-auto">
+                        <h3 class="text-xl font-800 uppercase text-slate-800 mb-6 italic border-l-4 border-red-500 pl-3">Matriz de Validación (Decision Matrix)</h3>
+                        <table class="w-full text-left logic-table">
+                            <thead>
+                                <tr>
+                                    <th>Stagnant Type</th>
+                                    <th>Umbral</th>
+                                    <th>Status Rider</th>
+                                    <th>Stacked?</th>
+                                    <th>Distancia</th>
+                                    <th>Acción Motor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Send to Vendor</td>
+                                    <td class="font-bold">15 min</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Update & STV</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Queued</td>
+                                    <td class="font-bold">Config</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Dispatch</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Dispatched</td>
+                                    <td class="font-bold">25 min</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Forced Accept</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Accepted</td>
+                                    <td class="font-bold">20 min</td>
+                                    <td class="check-icon">✓ Break / Off</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="check-icon">✓ > 200m</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Undispatch & Reasign</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Near Pickup</td>
+                                    <td class="font-bold">40 min</td>
+                                    <td class="check-icon">✓ Break / Off</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="check-icon">✓ > 100m</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Reasign (Hard/Soft)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Picked Up</td>
+                                    <td class="font-bold">40 min</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="check-icon">✓ Sin Stacking</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Complete Order</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Left Pickup</td>
+                                    <td class="font-bold">40 min</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="check-icon">✓ Sin Stacking</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Complete Order</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-bold text-slate-700">Near Dropoff</td>
+                                    <td class="font-bold">40 min</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="cross-icon">-</td>
+                                    <td class="check-icon">✓ < 100m</td>
+                                    <td class="peya-red font-800 uppercase italic">[Al3] Complete Order</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- EVIDENCIA BOT -->
+                    <div class="card flex flex-col justify-between border-2 border-dashed border-red-200">
+                        <div>
+                            <h3 class="text-xl font-800 uppercase text-slate-800 mb-4 italic">Evidencia Trazabilidad</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed mb-6">El Engine no solo actúa; deja una huella digital para auditoría. Cada acción incluye una nota estructurada con el motivo, umbral superado y timestamp.</p>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-2 border border-slate-200 h-64 flex items-center justify-center relative overflow-hidden group">
+                            <img src="stack/bot_note_example.png" onerror="this.src='https://placehold.co/400x500?text=Adjuntar+Captura+Notas+Bot';" class="rounded shadow-sm object-contain w-full h-full grayscale group-hover:grayscale-0 transition-all">
+                            <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all cursor-pointer">
+                                <span class="text-white text-[10px] font-black uppercase tracking-widest">Ejemplo Nota bot_engine</span>
+                            </div>
+                        </div>
+                        <p class="text-[9px] text-center text-slate-400 mt-4 italic uppercase">Formato: [Al3-Engine] {Estado} | {Motivo}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- ACCIONES PREVIAS -->
+                    <div class="card bg-slate-50 border-none">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white font-black text-xs">PRE</div>
+                            <h3 class="text-lg font-800 uppercase text-slate-800 italic">Protocolo Pre-Acción</h3>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3">
+                                <span class="text-red-500 font-bold">1.</span>
+                                <p class="text-xs font-semibold text-slate-700">Sincronización BigQuery-Sheets: Filtrado de órdenes con >X minutos de estancamiento.</p>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-red-500 font-bold">2.</span>
+                                <p class="text-xs font-semibold text-slate-700">Validación de Exclusión: El motor verifica si la ciudad o zona está en la "lista blanca" de gestión activa.</p>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-red-500 font-bold">3.</span>
+                                <p class="text-xs font-semibold text-slate-700">Health Check Driver: Confirmación de sesión Okta activa antes de iniciar scraping individual.</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- ACCIONES POSTERIORES -->
+                    <div class="card bg-red-50/30 border-none">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-full peya-bg-red flex items-center justify-center text-white font-black text-xs">POST</div>
+                            <h3 class="text-lg font-800 uppercase text-slate-800 italic">Protocolo Post-Acción</h3>
+                        </div>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3">
+                                <span class="text-red-500 font-bold">1.</span>
+                                <p class="text-xs font-semibold text-slate-700">Escritura de Log en Hurrier: Inyección de nota técnica para visibilidad de los analistas manuales.</p>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-red-500 font-bold">2.</span>
+                                <p class="text-xs font-semibold text-slate-700">Update Histórico: Registro de la gestión exitosa en la base de datos de impacto (Rising LiveOps).</p>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-red-500 font-bold">3.</span>
+                                <p class="text-xs font-semibold text-slate-700">Notificación Slack (Alerting): Si la gestión falla tras 3 intentos, se deriva a canal de revisión manual.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        
+            <!-- FOOTER EJECUTIVO -->
             <footer class="mt-20 border-t border-slate-200 pt-10 pb-20">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-8">
                     <div class="flex flex-col items-center md:items-start">
