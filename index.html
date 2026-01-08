@@ -633,6 +633,12 @@
                 </div>
             </div>
 
+            <div class="text-slate-500 flex justify-between items-end mb-10 pb-6">
+                <div>
+                    <h1>A raíz de la oportunidad se crea el LiveOps Engine o AI3 (Automation Intelligence 3rd Layer), una aplicación de escritorio desarrollada en Python para optimizar y automatizar tareas repetitivas del equipo y, de manera especial, la gestión de órdenes Stagnant. Para ello se intentó replicar la inspección y accionamiento manual de un agente, plasmada en la siguiente Matriz:</h1>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 gap-8 mb-10">
                 <!-- MATRIZ DE DECISIÓN -->
                 <div class="card overflow-x-auto w-full">
@@ -661,7 +667,7 @@
                                 <td class="font-bold text-slate-700">Queued</td>
                                 <td></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Si la ciudad está en lista de exclusión, la orden se descarta de gestión automática.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Queued Status</div><div class="tooltip-detail">Valida que la orden esté en estado Queued en Hurrier.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Queued Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Queued.</div></div></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -669,120 +675,120 @@
                                 <td></td>
                                 <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Dispatch</td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Este estado solo se gestiona después de una reasignación desde Accepted o Near Pickup para agilizar la asignación automática de Hurrier.</div></div></td>
                                 <td></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_queued.png')">✓</span></td>
                             </tr>
                             <!-- DISPATCH -->
                             <tr>
                                 <td class="font-bold text-slate-700">Dispatch</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Select Zone</div><div class="tooltip-detail">Zona debe estar activa en configuración regional.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Si la ciudad está excluida, se descarta.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Dispatch Status</div><div class="tooltip-detail">Valida estado Dispatch/Driver Assignment.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time > 25 min</div><div class="tooltip-detail">Umbral: Si el tiempo en Dispatch supera 25 minutos desde asignación.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Select Zone</div><div class="tooltip-detail">Permite seleccionar las ciudades a gestionar (Manual).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Dispatch Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Dispatch.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Em Dispatch hace más de 25 minutos.</div></div></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Undispatch, Update</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Si falla undispatch, intenta update en Hurrier.</div></div></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_dispatch.png')">✓</span></td>
+                                <td></td>
+                                <td><span class="backup-note-btn" onclick="openBackupNote('dispatch_note.png')">✓</span></td>
                             </tr>
                             <!-- ACCEPTED -->
                             <tr>
                                 <td class="font-bold text-slate-700">Accepted</td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Si zona está excluida, se descarta de gestión.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Accepted Status</div><div class="tooltip-detail">Valida que está en estado Accepted/Driver Accepted.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time > 20 min</div><div class="tooltip-detail">Umbral: Aceptada hace más de 20 minutos.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/Off</div><div class="tooltip-detail">Si rider está en Break u Offline, se reasigna.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Bike, Walker, Moto</div><div class="tooltip-detail">Validar tipo de vehículo para ajustar umbrales.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stacked Orders</div><div class="tooltip-detail">Si rider tiene múltiples órdenes stacked, análisis de impacto.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance > 200m</div><div class="tooltip-detail">Si distancia a pickup > 200m, se considera crítica.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Accepted Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Accepted.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Aceptada hace 20 o más minutos.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/Off</div><div class="tooltip-detail">Si rider está en Break o TNW, Reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Vehicle</div><div class="tooltip-detail">Si rider es Walker o Bicicleta, se valida primero PU DISTANCE. Si es Motorizado, se reasigna.</div></div></td>
+                                <td></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance</div><div class="tooltip-detail">Si rider no es Motorizado y distancia a pickup >500m, se reasigna.</div></div></td>
                                 <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Undispatch</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Si undispatch falla, intenta reasignación forzada.</div></div></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_accepted.png')">✓</span></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Se valida que la orden haya pasado a Queued y se aplica Manual Dispatch.</div></div></td>
+                                <td><span class="backup-note-btn" onclick="openBackupNote('accepted_note.png')">✓</span></td>
                             </tr>
                             <!-- NEAR PICKUP -->
                             <tr>
                                 <td class="font-bold text-slate-700">Near Pickup</td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Validar si zona está en lista de exclusión.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Near Pickup Status</div><div class="tooltip-detail">Estado: Near Pickup Location.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Near Pickup Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Near Pickup.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Near Pickup hace más de 40 minutos.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/Off</div><div class="tooltip-detail">Si rider está en Break o TNW, Reasigna.</div></div></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/Off</div><div class="tooltip-detail">Si rider está en Break/Off, reasignar.</div></div></td>
-                                <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Preferente en órdenes sin múltiples asignaciones.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance > 100m</div><div class="tooltip-detail">Distancia crítica para Near Pickup: > 100m.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene multiples entregas en curso, no reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance</div><div class="tooltip-detail">Si distancia a pickup >50m, se reasigna.</div></div></td>
                                 <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Undispatch</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Reasignación Hard o Soft según disponibilidad.</div></div></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_near_pickup.png')">✓</span></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Se valida que la orden haya pasado a Queued y se aplica Manual Dispatch.</div></div></td>
+                                <td><span class="backup-note-btn" onclick="openBackupNote('npu_note.png')">✓</span></td>
                             </tr>
                             <!-- PICKED UP -->
                             <tr>
                                 <td class="font-bold text-slate-700">Picked Up</td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Validar exclusión de zona.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Picked Up Status</div><div class="tooltip-detail">Estado: Order Picked Up / En Ruta.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Picked Up Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Picked Up.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Picked Up hace más de 40 minutos.</div></div></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si hay stacking, análisis de priorización de delivery.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene multiples entregas en curso, no reasigna.</div></div></td>
                                 <td></td>
                                 <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Complete</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Si no se puede completar, contact rider.</div></div></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_picked_up.png')">✓</span></td>
+                                <td></td>
+                                <td><span class="backup-note-btn" onclick="openBackupNote('pu_note.png')">✓</span></td>
                             </tr>
                             <!-- LEFT PICKUP -->
                             <tr>
                                 <td class="font-bold text-slate-700">Left Pickup</td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Validar exclusión.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Left Pickup Status</div><div class="tooltip-detail">Estado: Rider Left Pickup Location.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Left Pickup Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Left Pickup.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Left Pickup hace más de 40 minutos.</div></div></td>
                                 <td></td>
                                 <td></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene multiples entregas en curso, no completa.</div></div></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Orden en tránsito sin stacking.</div></div></td>
-                                <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Validate DO Distance</div><div class="tooltip-detail">Distancia al punto de entrega.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">DO Distance</div><div class="tooltip-detail">Si distancia a dropoff >50m, se completa.</div></div></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Complete</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Escalación a revisión manual si hay retrasos.</div></div></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_left_pickup.png')">✓</span></td>
+                                <td></td>
+                                <td><span class="backup-note-btn" onclick="openBackupNote('lpu_note.png')">✓</span></td>
                             </tr>
                             <!-- NEAR DROPOFF -->
                             <tr>
                                 <td class="font-bold text-slate-700">Near Dropoff</td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Validar exclusión.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Near Dropoff Status</div><div class="tooltip-detail">Estado: Rider Near Dropoff Location.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Near Dropoff Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Near Dropoff.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Near Dropoff hace más de 40 minutos.</div></div></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">DO Distance < 100m</div><div class="tooltip-detail">Distancia al punto de entrega < 100m.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">DO Distance</div><div class="tooltip-detail">Si distancia a dropoff >50m, se completa.</div></div></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Complete</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">AutoComplete forzado si PIN timeouts.</div></div></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_near_dropoff.png')">✓</span></td>
+                                <td></td>
+                                <td><span class="backup-note-btn" onclick="openBackupNote('ndo_note.png')">✓</span></td>
                             </tr>
                             <!-- SEND TO VENDOR -->
                             <tr>
                                 <td class="font-bold text-slate-700">Send to Vendor</td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Validar zona para STV.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">STV Status</div><div class="tooltip-detail">Estado: Send to Vendor elegible.</div></div></td>
-                                <td></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">STV Status</div><div class="tooltip-detail">Valida que la orden no tenga Send to Vendor accionado.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Sin send to vendor hace más de 15 minutos.</div></div></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Update, STV</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Retry STV o escalación manual.</div></div></td>
-                                <td><span class="backup-note-btn" onclick="openBackupNote('nota_send_to_vendor.png')">✓</span></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail"> Si falla Intento #1 se cambia hora de STV (+15min) y se ejecuta. Si falla Intento #2 se prueba con nueva hora (+30min). Si falla intento #3, se notifica para revisión manual.</div></div></td>
+                                <td><span class="backup-note-btn" onclick="openBackupNote('stv_note.png')">✓</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -821,15 +827,15 @@
                     <ul class="space-y-4">
                         <li class="flex gap-3">
                             <span class="text-red-500 font-bold">1.</span>
-                            <p class="text-xs font-semibold text-slate-700">Escritura de Log en Hurrier: Inyección de nota técnica para visibilidad de los analistas manuales.</p>
+                            <p class="text-xs font-semibold text-slate-700">Notas en Hurrier: Inyección de nota técnica para visibilidad de gestión LiveOps.</p>
                         </li>
                         <li class="flex gap-3">
                             <span class="text-red-500 font-bold">2.</span>
-                            <p class="text-xs font-semibold text-slate-700">Update Histórico: Registro de la gestión exitosa en la base de datos de impacto (Rising LiveOps).</p>
+                            <p class="text-xs font-semibold text-slate-700">Update Histórico: Registro de la gestión exitosa en la base de datos (Sheet).</p>
                         </li>
                         <li class="flex gap-3">
                             <span class="text-red-500 font-bold">3.</span>
-                            <p class="text-xs font-semibold text-slate-700">Notificación Slack (Alerting): Si la gestión falla tras 3 intentos, se deriva a canal de revisión manual.</p>
+                            <p class="text-xs font-semibold text-slate-700">Alert Slack (WIP): En caso de acumulación de gestiones fallidas, se dispara warning a través de Slack.</p>
                         </li>
                     </ul>
                 </div>
@@ -843,6 +849,16 @@
                 <p class="text-slate-500 uppercase text-xs font-bold tracking-[0.2em] mt-2">Automation 3rd Layer | Data 2025</p>
             </div>
         </div>
+
+        <div class="text-slate-500 flex justify-between items-end mb-10 pb-6">
+            <div>
+                <h1>
+                    En esta sección presentamos las capas de desarrollo del LiveOps Engine, una solución construida 100% en Python, junto con la documentación exhaustiva del aplicativo que actualmente utiliza LiveOps para la gestión de órdenes stagnant y el reporting en tiempo real. Este material busca dar visibilidad tanto a la arquitectura como a las capacidades operativas que sustentan el Engine en producción.
+                </h1>
+                <h3 class="mt-2 text-xs">Nota: Recuerda clickear para explorar cada capa.</h3>
+            </div>
+        </div>
+
 
         <!-- SECCIÓN ARQUITECTURA TÉCNICA (INTERACTIVA) -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-20">
@@ -883,6 +899,31 @@
                 <!-- Inyectado vía JS -->
             </div>
         </div>
+
+        <div class="text-slate-500 flex justify-between items-end mb-10 pb-6">
+            <div>
+                <h1>
+                    Actualmente el Engine no solo gestiona órdenes en Hurrier, también realiza scraping a sus distintos dashboards, normaliza datos, cálcula métricas y genera reportes en tiempo real para nuestro canal de Slack 
+                    <a 
+                        href="https://deliveryhero.enterprise.slack.com/archives/C02N4KD5Y0J" 
+                        target="_blank" 
+                        class="text-blue-500 hover:underline"
+                    >
+                        #live-ops-cl
+                    </a>.
+                    También existe un 
+                    <a 
+                        href="https://docs.google.com/document/d/1vM2ttvEceo5pf5CBODlV0fdBQx_Gcr7r_lWouQEPxCU/edit?tab=t.0" 
+                        target="_blank" 
+                        class="text-blue-500 hover:underline"
+                    >
+                        proyecto
+                    </a> 
+                    de automatización inteligente con IA, que forma parte del AI Challenge 2025 impulsado por el liderazgo de Log & Ops CL, y que busca integrar al Engine la gestión automática de esquemas de eventos en DAS basado en el analisis de data histórica y en tiempo real (Actualmente se encuentra en base exploratoria). A continuación compartimos los flujos de sistemas que operan en cada caso:
+                </h1>
+            </div>
+        </div>
+
 
     
         <!-- SECCIÓN STACK FLOW -->
@@ -945,6 +986,13 @@
             </div>
         </div>
 
+        <div class="text-slate-500 flex justify-between items-end mb-10 pb-6">
+            <div>
+                <h1>A continuación te compartimos los principales resultados y la evolución del Engine en la etapa inicial del proyecto:</h1>
+                <h3 class="mt-2 text-xs">Nota: Recuerda clickear o pasar el cursor a través del gráfico y las distintas cards para visualizar gráficos, filtrar o switchear.</h3>
+            </div>
+        </div>
+
         <!-- SECCIÓN DE EVOLUCIÓN OPERATIVA Y LOGROS -->
         <div class="grid grid-cols-1 gap-10 mt-20">
             
@@ -953,7 +1001,8 @@
                 <div class="flex justify-between items-start mb-6">
                     <div>
                         <h2 class="text-2xl font-bold tracking-tight">Evolución Operativa</h2>
-                        <p class="text-slate-400 text-sm">Pasa el cursor sobre los meses para ver el detalle táctico</p>
+                        <p class="text-slate-400 text-sm">Puedes pasar el cursor sobre los meses para ver los hitos tácticos o presionar el switch para cambiar entre vistas</p>
+                        <p class="text-slate-400 text-sm">y hacer click en la leyenda para filtrar por un único stage.</p>
                     </div>
                     <div class="flex gap-4">
                         <div class="chart-view-toggle">
