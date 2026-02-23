@@ -7,536 +7,30 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; overflow-x: hidden; }
-        .peya-red { color: #E21B23; }
-        .peya-bg-red { background-color: #E21B23; }
-        .card { background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); padding: 2rem; border: 1px solid #e2e8f0; position: relative; }
-        .chart-container { position: relative; height: 450px; width: 100%; }
-        
-        /* Estilo para la caja de Storytelling Interactiva */
-        #story-overlay {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            background: rgba(255, 255, 255, 0.98);
-            border-left: 5px solid #E21B23;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            border-radius: 12px;
-            z-index: 100;
-            pointer-events: none;
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        #story-overlay.active {
-            opacity: 1;
-            top: 40px;
-        }
-        .stat-badge {
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            padding: 2px 8px;
-            border-radius: 4px;
-            background: #f1f5f9;
-            color: #64748b;
-            display: inline-block;
-        }
-
-        /* Estilos para la línea de tiempo Stagnant */
-        .timeline-node {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: white;
-            border: 4px solid #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 0.7rem;
-            color: #94a3b8;
-            z-index: 10;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-        }
-        .timeline-item:hover .timeline-node {
-            border-color: #E21B23;
-            color: #E21B23;
-            transform: scale(1.1);
-        }
-        .timeline-item:hover .state-tag {
-            background: #fef2f2;
-            color: #E21B23;
-            border-color: #fecaca;
-        }
-        .state-tag {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #64748b;
-            text-transform: uppercase;
-            transition: all 0.2s;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-        /* POPUP PARA GRÁFICOS DE TIMELINE */
-        .timeline-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-            padding: 1.5rem;
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            max-width: 600px;
-            width: 90vw;
-        }
-        .timeline-popup.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .timeline-popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 998;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        .timeline-popup-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .timeline-popup-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #E21B23;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-        }
-        .timeline-popup img {
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        /* Estilos para la definición de Stagnant */
-        .state-chip {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #64748b;
-            transition: all 0.2s;
-        }
-        .state-chip:hover {
-            border-color: #E21B23;
-            color: #E21B23;
-            background: #fffafa;
-        }
-        .flow-line {
-            height: 2px;
-            background: #e2e8f0;
-            flex-grow: 1;
-            margin: 0 8px;
-        }
-
-        /* Estilos para los Logros */
-        .achievement-card {
-            background: #ffffff;
-            border: 1px solid #f1f5f9;
-            padding: 1.25rem;
-            border-radius: 16px;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-        .achievement-card:hover {
-            transform: translateY(-2px);
-            border-color: #fee2e2;
-        }
-        .case-study-card {
-            background: #f8fafc;
-            border-top: 4px solid #E21B23;
-            padding: 1rem;
-            border-radius: 12px;
-            transition: all 0.2s;
-            cursor: pointer;
-            position: relative;
-        }
-        .case-study-card:hover {
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .case-study-graphics {
-            display: none;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e2e8f0;
-            grid-column: 1 / -1;
-            animation: slideDown 0.3s ease-out;
-        }
-        .case-study-graphics.active {
-            display: grid;
-        }
-        .case-study-graphics.two-cols {
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        .case-study-graphics.one-col {
-            grid-template-columns: 1fr;
-        }
-        .case-study-graphics img {
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .case-study-graphics img:hover {
-            transform: scale(1.02);
-        }
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        /* MODAL DE IMÁGENES */
-        .image-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .image-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .image-modal-content {
-            position: relative;
-            max-width: 90vw;
-            max-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: auto;
-        }
-        .image-modal img {
-            max-width: 90vw;
-            max-height: 90vh;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .image-modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 24px;
-            color: white;
-            transition: all 0.2s ease;
-        }
-        .image-modal-close:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
-        }
-
-        /* LÓGICA DE CARRUSEL INFINITO */
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .carousel-wrapper { width: 100%; overflow: hidden; }
-        .stack-carousel {
-            display: flex;
-            width: max-content;
-            animation: scroll 40s linear infinite;
-        }
-        .stack-carousel:hover { animation-play-state: paused; }
-        .stack-item {
-            flex: 0 0 auto;
-            width: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        .arrow-flow {
-            flex: 0 0 auto;
-            color: #E21B23;
-            font-size: 24px;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.3; transform: translateX(-5px); }
-            50% { opacity: 1; transform: translateX(5px); }
-            100% { opacity: 0.3; transform: translateX(-5px); }
-        }
-
-        /* Tabs Técnicas */
-        .tech-tab {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-        }
-        .tech-tab.active {
-            border-bottom-color: #E21B23;
-            color: #E21B23;
-            font-weight: 800;
-        }
-
-        
-        /* Estilo Link GitHub */
-        .github-link {
-            display: contents;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 8px;
-            background: #f1f5f9;
-            color: #475569;
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.2s;
-            border: 1px solid #e2e8f0;
-        }
-        .github-link:hover {
-            background: #e2e8f0;
-            color: #0f172a;
-            border-color: #cbd5e1;
-        }
-
-        /* MATRIZ DE DECISIÓN INTERACTIVA */
-        .logic-table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        .logic-table th {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white;
-            text-transform: uppercase;
-            font-size: 10px;
-            letter-spacing: 0.05em;
-            padding: 14px;
-            font-weight: 800;
-            text-align: center;
-            border: 1px solid #334155;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .logic-table td {
-            padding: 12px 14px;
-            font-size: 11px;
-            border-bottom: 1px solid #e2e8f0;
-            border-right: 1px solid #e2e8f0;
-            background: white;
-            min-height: 40px;
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-        }
-        .logic-table tbody tr {
-            transition: background-color 0.2s ease;
-        }
-        .logic-table tbody tr:nth-child(odd) {
-            background-color: #f8fafc;
-        }
-        .logic-table tbody tr:hover {
-            background-color: #f1f5f9;
-        }
-        .logic-table td:first-child {
-            font-weight: 700;
-            color: #0f172a;
-            background: #f8fafc;
-            position: sticky;
-            left: 0;
-            z-index: 5;
-            min-width: 140px;
-            border-right: 2px solid #e2e8f0;
-            text-align: left;
-        }
-        .logic-table tbody tr:hover td:first-child {
-            background-color: #f1f5f9;
-        }
-        .check-cell {
-            cursor: help;
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-        .check-icon { color: #10b981; font-weight: bold; font-size: 1.2rem; }
-        .cross-icon { color: #cbd5e1; }
-        .tooltip-flip {
-            position: relative;
-            perspective: 1000px;
-        }
-        .tooltip-flip-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .tooltip-flip:hover .tooltip-flip-inner {
-            transform: rotateY(180deg);
-        }
-        .tooltip-flip-front, .tooltip-flip-back {
-            position: absolute;
-            width: 100%;
-            backface-visibility: hidden;
-        }
-        .tooltip-flip-back {
-            transform: rotateY(180deg);
-        }
-        .tooltip-content {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            border: 2px solid #E21B23;
-            border-radius: 8px;
-            padding: 1rem;
-            z-index: 1000;
-            min-width: 250px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            margin-bottom: 10px;
-        }
-        .check-cell:hover .tooltip-content {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-        .tooltip-content::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid #E21B23;
-        }
-        .tooltip-label {
-            font-weight: 800;
-            font-size: 0.75rem;
-            color: #E21B23;
-            uppercase;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-        }
-        .tooltip-detail {
-            font-size: 0.7rem;
-            color: #475569;
-            line-height: 1.4;
-        }
-        .backup-note-btn {
-            cursor: pointer;
-            color: #10b981;
-            font-weight: bold;
-            text-decoration: underline;
-            transition: all 0.2s;
-        }
-        .backup-note-btn:hover {
-            color: #E21B23;
-            transform: scale(1.05);
-        }
-
-        /* SWITCH TOGGLE PARA VISTA DE GRÁFICO */
-        .chart-view-toggle {
-            display: flex;
-            gap: 0;
-            background: #f1f5f9;
-            border-radius: 8px;
-            padding: 2px;
-            width: fit-content;
-        }
-        .toggle-btn {
-            padding: 6px 12px;
-            border: none;
-            background: transparent;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #64748b;
-            border-radius: 6px;
-        }
-        .toggle-btn.active {
-            background: white;
-            color: #E21B23;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .toggle-btn:hover {
-            color: #0f172a;
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-dark.css">
 </head>
 <body class="p-10">
+
+    <!-- THEME TOGGLE SWITCH -->
+    <div class="theme-toggle-container">
+        <svg class="theme-icon sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <button class="theme-toggle-switch" id="themeToggle" aria-label="Toggle theme"></button>
+        <svg class="theme-icon moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span class="theme-toggle-label" id="themeLabel">Light</span>
+    </div>
 
     <div class="max-w-6xl mx-auto">
         <!-- HEADER EJECUTIVO -->
@@ -656,6 +150,7 @@
                                 <th>Stacked Orders</th>
                                 <th>Rider PU Distance</th>
                                 <th>Rider DO Distance</th>
+                                <th>Food Is Ready</th>
                                 <th>Action</th>
                                 <th>Fall Back</th>
                                 <th>Backup Note</th>
@@ -668,6 +163,7 @@
                                 <td></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Si la ciudad está en lista de exclusión, la orden se descarta de gestión automática.</div></div></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Queued Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Queued.</div></div></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -690,6 +186,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Undispatch, Update</td>
                                 <td></td>
                                 <td><span class="backup-note-btn" onclick="openBackupNote('dispatch_note.png')">✓</span></td>
@@ -700,14 +197,15 @@
                                 <td></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Accepted Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Accepted.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Aceptada hace 20 o más minutos.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/Off</div><div class="tooltip-detail">Si rider está en Break o TNW, Reasigna.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Vehicle</div><div class="tooltip-detail">Si rider es Walker o Bicicleta, se valida primero PU DISTANCE. Si es Motorizado, se reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Aceptada hace 20+ min (Normal), 30+ min (C2C/B2C).</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/TNW</div><div class="tooltip-detail">Si rider está en Break o Temporary Not Working, Reasigna inmediatamente.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Vehicle Type</div><div class="tooltip-detail">Si rider es Walker/Bicicleta, valida distancia primero. Si es Motorizado, reasigna directo.</div></div></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance</div><div class="tooltip-detail">Si rider no es Motorizado y distancia a pickup >500m, se reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance & Partner</div><div class="tooltip-detail">C2C/B2C: ≥1500m. Normal+Walker/Bici: >500m. Normal+Moto: reasigna siempre.</div></div></td>
                                 <td></td>
-                                <td class="peya-red font-800 uppercase italic text-xs">Undispatch</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Se valida que la orden haya pasado a Queued y se aplica Manual Dispatch.</div></div></td>
+                                <td></td>
+                                <td class="peya-red font-800 uppercase italic text-xs">Reasignar</td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Se valida Queued y se aplica Dispatch automático.</div></div></td>
                                 <td><span class="backup-note-btn" onclick="openBackupNote('accepted_note.png')">✓</span></td>
                             </tr>
                             <!-- NEAR PICKUP -->
@@ -717,13 +215,14 @@
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Near Pickup Status</div><div class="tooltip-detail">Valida que la orden esté efectivamente en estado Near Pickup.</div></div></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Near Pickup hace más de 40 minutos.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/Off</div><div class="tooltip-detail">Si rider está en Break o TNW, Reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Rider Break/TNW</div><div class="tooltip-detail">Si rider está en Break o Temporary Not Working, Reasigna inmediatamente.</div></div></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene multiples entregas en curso, no reasigna.</div></div></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance</div><div class="tooltip-detail">Si distancia a pickup >50m, se reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene múltiples entregas en curso, no reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">PU Distance</div><div class="tooltip-detail">Si distancia a pickup ≥150m, se reasigna.</div></div></td>
                                 <td></td>
-                                <td class="peya-red font-800 uppercase italic text-xs">Undispatch</td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Se valida que la orden haya pasado a Queued y se aplica Manual Dispatch.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Food Is Ready</div><div class="tooltip-detail">Si desde FIR transcurrió Est PT, se reasigna.</div></div></td>
+                                <td class="peya-red font-800 uppercase italic text-xs">Reasignar</td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Fallback</div><div class="tooltip-detail">Se valida Queued y se aplica Dispatch automático.</div></div></td>
                                 <td><span class="backup-note-btn" onclick="openBackupNote('npu_note.png')">✓</span></td>
                             </tr>
                             <!-- PICKED UP -->
@@ -735,7 +234,8 @@
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Picked Up hace más de 40 minutos.</div></div></td>
                                 <td></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene multiples entregas en curso, no reasigna.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene múltiples entregas en curso, no reasigna.</div></div></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Complete</td>
@@ -751,9 +251,10 @@
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Left Pickup hace más de 40 minutos.</div></div></td>
                                 <td></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene multiples entregas en curso, no completa.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Sin Stacking</div><div class="tooltip-detail">Si rider tiene múltiples entregas en curso, no completa.</div></div></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">DO Distance</div><div class="tooltip-detail">Si distancia a dropoff >50m, se completa.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">DO Distance</div><div class="tooltip-detail">Si distancia a dropoff >150m, se completa. Si es C2C/B2C: ≥1500m.</div></div></td>
+                                <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Complete</td>
                                 <td></td>
                                 <td><span class="backup-note-btn" onclick="openBackupNote('lpu_note.png')">✓</span></td>
@@ -769,7 +270,8 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">DO Distance</div><div class="tooltip-detail">Si distancia a dropoff >50m, se completa.</div></div></td>
+                                <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">DO Distance</div><div class="tooltip-detail">Si distancia a dropoff >150m, se completa.</div></div></td>
+                                <td></td>
                                 <td class="peya-red font-800 uppercase italic text-xs">Complete</td>
                                 <td></td>
                                 <td><span class="backup-note-btn" onclick="openBackupNote('ndo_note.png')">✓</span></td>
@@ -781,6 +283,7 @@
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Exclude Zone</div><div class="tooltip-detail">Permite excluir ciudades de la gestión automática (Scheduler).</div></div></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">STV Status</div><div class="tooltip-detail">Valida que la orden no tenga Send to Vendor accionado.</div></div></td>
                                 <td class="check-cell"><span class="check-icon">✓</span><div class="tooltip-content"><div class="tooltip-label">Stagnant Time</div><div class="tooltip-detail">Umbral: Sin send to vendor hace más de 15 minutos.</div></div></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -1218,6 +721,30 @@
     </div>
 
     <script>
+
+        <!-- THEME TOGGLE FUNCTIONALITY -->
+        const themeToggle = document.getElementById('themeToggle');
+        const themeLabel = document.getElementById('themeLabel');
+        const htmlElement = document.documentElement;
+
+        // Detectar preferencia del sistema y cargar tema guardado
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.classList.add('dark');
+            themeLabel.textContent = 'Dark';
+        }
+
+        // Event listener para el toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.classList.toggle('dark');
+            
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const newTheme = isDarkMode ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            themeLabel.textContent = isDarkMode ? 'Dark' : 'Light';
+        });
 
         <!-- LIVEOPS ENGINE ARCHITECTURE -->
         // DATOS TÉCNICOS

@@ -1,0 +1,274 @@
+/* ========================================
+   LIVEOPS ENGINE - DARK MODE STYLES
+   ======================================== */
+
+body.dark-mode {
+    --peya-red: #FF3D45;
+    --peya-bg-red: #FF3D45;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --border-color: #475569;
+    --border-light: #334155;
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Ajustes específicos para Dark Mode */
+
+body.dark-mode #story-overlay {
+    background: rgba(30, 41, 59, 0.98);
+    border-left-color: var(--peya-red);
+}
+
+body.dark-mode .stat-badge {
+    background: rgba(51, 65, 85, 0.8);
+    color: var(--text-muted);
+}
+
+body.dark-mode .state-chip:hover {
+    background: rgba(255, 61, 69, 0.1);
+}
+
+body.dark-mode .case-study-card:hover {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .achievement-card {
+    border-color: var(--border-light);
+}
+
+body.dark-mode .achievement-card:hover {
+    border-color: #7f1d1d;
+}
+
+body.dark-mode .achievement-card.border-red-100 {
+    background: rgba(255, 61, 69, 0.1);
+    border-color: rgba(255, 61, 69, 0.2);
+}
+
+body.dark-mode .logic-table th {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .logic-table td {
+    border-color: var(--border-color);
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .logic-table tbody tr:nth-child(odd) {
+    background-color: rgba(15, 23, 42, 0.5);
+}
+
+body.dark-mode .logic-table tbody tr:hover {
+    background-color: var(--bg-tertiary);
+}
+
+body.dark-mode .logic-table td:first-child {
+    background: rgba(15, 23, 42, 0.5);
+    color: var(--text-primary);
+}
+
+body.dark-mode .logic-table tbody tr:hover td:first-child {
+    background-color: var(--bg-tertiary);
+}
+
+body.dark-mode .tooltip-content {
+    background: var(--bg-secondary);
+    border-color: var(--peya-red);
+}
+
+body.dark-mode .tooltip-content::after {
+    border-top-color: var(--peya-red);
+}
+
+body.dark-mode .tooltip-label {
+    color: var(--peya-red);
+}
+
+body.dark-mode .tooltip-detail {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .chart-view-toggle {
+    background: var(--bg-tertiary);
+}
+
+body.dark-mode .toggle-btn.active {
+    background: var(--bg-secondary);
+    color: var(--peya-red);
+}
+
+body.dark-mode .timeline-node {
+    background: var(--bg-secondary);
+    border-color: var(--border-light);
+    color: var(--text-muted);
+}
+
+body.dark-mode .timeline-item:hover .timeline-node {
+    border-color: var(--peya-red);
+    color: var(--peya-red);
+}
+
+body.dark-mode .state-tag {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+
+body.dark-mode .timeline-item:hover .state-tag {
+    background: rgba(255, 61, 69, 0.1);
+    color: var(--peya-red);
+    border-color: rgba(255, 61, 69, 0.3);
+}
+
+body.dark-mode .timeline-popup {
+    background: var(--bg-secondary);
+}
+
+body.dark-mode .timeline-popup-overlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Tabla con estilos más suaves en dark */
+body.dark-mode .state-chip {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+
+body.dark-mode .state-chip:hover {
+    border-color: var(--peya-red);
+    color: var(--peya-red);
+}
+
+/* Textos secundarios */
+body.dark-mode .text-slate-500 {
+    color: var(--text-secondary);
+}
+
+body.dark-mode .text-slate-600 {
+    color: var(--text-muted);
+}
+
+body.dark-mode .text-slate-400 {
+    color: #94a3b8;
+}
+
+body.dark-mode .text-slate-700 {
+    color: #cbd5e1;
+}
+
+body.dark-mode .text-slate-800 {
+    color: #e2e8f0;
+}
+
+/* Backgrounds secundarios */
+body.dark-mode .bg-slate-50 {
+    background: rgba(51, 65, 85, 0.3);
+}
+
+body.dark-mode .bg-red-50 {
+    background: rgba(255, 61, 69, 0.05);
+}
+
+body.dark-mode .bg-slate-800 {
+    background: #1e293b;
+}
+
+body.dark-mode .border-b {
+    border-color: var(--border-color);
+}
+
+/* Estilo especial para cards en dark mode */
+body.dark-mode .card.bg-slate-50 {
+    background: rgba(51, 65, 85, 0.2);
+}
+
+body.dark-mode .card.bg-red-50 {
+    background: rgba(255, 61, 69, 0.05);
+}
+
+body.dark-mode .card.bg-red-50\/30 {
+    background: rgba(255, 61, 69, 0.05);
+}
+
+/* Links */
+body.dark-mode a {
+    color: #60a5fa;
+}
+
+body.dark-mode a:hover {
+    color: #93c5fd;
+}
+
+/* GitHub Link Dark Mode */
+body.dark-mode .github-link {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-color: var(--border-color);
+}
+
+body.dark-mode .github-link:hover {
+    background: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Scroll bar en dark mode */
+body.dark-mode::-webkit-scrollbar {
+    width: 10px;
+}
+
+body.dark-mode::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+body.dark-mode::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+}
+
+body.dark-mode::-webkit-scrollbar-thumb:hover {
+    background: var(--border-light);
+}
+
+/* Animaciones suaves en transición */
+body.dark-mode * {
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
+}
+
+/* Preservar animaciones que no sean transiciones de color */
+body.dark-mode .stack-carousel,
+body.dark-mode .arrow-flow,
+body.dark-mode .timeline-node,
+body.dark-mode .toggle-btn,
+body.dark-mode .theme-toggle-switch::after {
+    transition-property: none;
+}
+
+body.dark-mode .stack-carousel {
+    animation: scroll 40s linear infinite;
+}
+
+body.dark-mode .arrow-flow {
+    animation: pulse 1.5s infinite;
+}
+
+/* Estilos especiales para gráficos en dark mode */
+body.dark-mode canvas {
+    filter: invert(0.93) hue-rotate(200deg);
+}
+
+/* Degradados en dark mode */
+body.dark-mode .bg-gradient-to-r {
+    background-image: linear-gradient(to right, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.6));
+}
