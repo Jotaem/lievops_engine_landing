@@ -7,10 +7,119 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="styles-dark.css">
+    <style>
+        /* NAVBAR */
+        .loe-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1500;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 52px;
+            box-shadow: var(--shadow-sm);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .loe-navbar .nav-brand {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            margin-right: 2rem;
+            white-space: nowrap;
+        }
+        .loe-navbar .nav-brand span { color: var(--peya-red); }
+        .loe-navbar .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .loe-navbar .nav-links::-webkit-scrollbar { display: none; }
+        .loe-navbar .nav-link-item {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0 14px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .loe-navbar .nav-link-item:hover {
+            color: var(--peya-red);
+            border-bottom-color: var(--peya-red);
+        }
+        .loe-navbar .nav-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+            margin: 0 8px;
+        }
+        .loe-navbar .nav-cta {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: white;
+            background: var(--peya-red);
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+        .loe-navbar .nav-cta:hover {
+            background: #c41018;
+            color: white;
+            transform: translateY(-1px);
+        }
+        body.dark-mode .loe-navbar {
+            background: var(--bg-secondary);
+            border-bottom-color: var(--border-color);
+        }
+        body.dark-mode .loe-navbar .nav-brand { color: var(--text-primary); }
+        body.dark-mode .loe-navbar .nav-link-item { color: var(--text-muted); }
+        body.dark-mode .loe-navbar .nav-link-item:hover { color: var(--peya-red); }
+        /* offset for sticky nav */
+        .scroll-anchor { scroll-margin-top: 64px; }
+    </style>
 </head>
-<body class="p-10">
+<body class="p-0">
+
+    <!-- NAVBAR -->
+    <nav class="loe-navbar" id="mainNavbar">
+        <a href="#inicio" class="nav-brand">LiveOps <span>Engine</span></a>
+        <div class="nav-links">
+            <a href="#inicio" class="nav-link-item">Inicio</a>
+            <a href="#stagnant" class="nav-link-item">Gestión Stagnant</a>
+            <a href="#arquitectura" class="nav-link-item">Arquitectura</a>
+            <a href="#performance" class="nav-link-item">Performance</a>
+            <div class="nav-divider"></div>
+            <a href="resumen-ejecutivo.html" class="nav-link-item" style="color: var(--peya-red);">Resumen Ejecutivo</a>
+        </div>
+        <a href="resumen-ejecutivo.html" class="nav-cta">Ver Resumen Ejecutivo →</a>
+    </nav>
+
+    <div style="padding: 2.5rem;">
+    <div class="max-w-6xl mx-auto">
+        <!-- HEADER EJECUTIVO -->
+        <div id="inicio" class="scroll-anchor flex justify-between items-end mb-10 border-b pb-6">
 
     <!-- THEME TOGGLE SWITCH -->
     <div class="theme-toggle-container">
@@ -119,8 +228,8 @@
 
     <div class="max-w-6xl mx-auto">
         <!-- NUEVA SECCIÓN: MATRIZ DE DECISIÓN Y LÓGICA -->
-        <div class="mt-20">
-            <div class="flex justify-between items-end mb-10 border-b pb-6">
+        <div class="mt-20" id="stagnant">
+            <div class="scroll-anchor flex justify-between items-end mb-10 border-b pb-6">
                 <div>
                     <h1 class="text-4xl font-800 tracking-tighter">Lógica de Gestión <span class="peya-red">Stagnant</span></h1>
                     <p class="text-slate-500 uppercase text-xs font-bold tracking-[0.2em] mt-2">Automation 3rd Layer | Data 2025</p>
@@ -346,7 +455,7 @@
         </div>
 
         <!-- SECCIÓN TÉCNICA: HEADER EJECUTIVO -->
-        <div class="flex justify-between items-end mt-16 mb-10 border-b pb-6">
+        <div id="arquitectura" class="scroll-anchor flex justify-between items-end mt-16 mb-10 border-b pb-6">
             <div>
                 <h1 class="text-4xl font-800 tracking-tighter">LiveOps <span class="peya-red">Engine</span> Architecture</h1>
                 <p class="text-slate-500 uppercase text-xs font-bold tracking-[0.2em] mt-2">Automation 3rd Layer | Data 2025</p>
@@ -383,15 +492,15 @@
                 
                 <p class="text-[10px] font-black uppercase text-slate-400 mb-4 mt-6 tracking-widest">Documentación</p>
                 <div class="space-y-2">
-                    <a href="https://gist.github.com/Jotaem/03aabe9e1d0beaa762ace1690f2e6472" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border hover:shadow-md transition-all duration-200 w-full">
+                    <a href="https://gist.github.com/Jotaem/03aabe9e1d0beaa762ace1690f2e6472" target="_blank" class="doc-link flex items-center gap-3 px-4 py-3 rounded-xl bg-white border hover:shadow-md transition-all duration-200 w-full">
                         <img src="https://cdn.worldvectorlogo.com/logos/github-icon-1.svg" class="h-5" alt="GitHub">
                         <span class="text-xs font-bold text-slate-800 uppercase">README.md</span>
                     </a>
-                    <a href="https://gist.github.com/Jotaem/689cfdfea30c0a5bd42de3cccf5dd7fd" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border hover:shadow-md transition-all duration-200 w-full">
+                    <a href="https://gist.github.com/Jotaem/689cfdfea30c0a5bd42de3cccf5dd7fd" target="_blank" class="doc-link flex items-center gap-3 px-4 py-3 rounded-xl bg-white border hover:shadow-md transition-all duration-200 w-full">
                         <img src="https://cdn.worldvectorlogo.com/logos/github-icon-1.svg" class="h-5" alt="GitHub">
                         <span class="text-xs font-bold text-slate-800 uppercase">DIRECTORIO.md</span>
                     </a>
-                    <a href="https://gist.github.com/Jotaem/9b02a31b7c0b98fd33d64b62419fb2fb" target="_blank" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border hover:shadow-md transition-all duration-200 w-full">
+                    <a href="https://gist.github.com/Jotaem/9b02a31b7c0b98fd33d64b62419fb2fb" target="_blank" class="doc-link flex items-center gap-3 px-4 py-3 rounded-xl bg-white border hover:shadow-md transition-all duration-200 w-full">
                         <img src="https://cdn.worldvectorlogo.com/logos/github-icon-1.svg" class="h-5" alt="GitHub">
                         <span class="text-xs font-bold text-slate-800 uppercase">ARCHITECTURE.md</span>
                     </a>
@@ -399,7 +508,11 @@
             </div>
 
             <div class="col-span-3 card min-h-[500px]" id="tech-content">
-                <!-- Inyectado vía JS -->
+                <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 1rem;">
+                    <p class="text-xs font-bold uppercase" style="color: var(--text-muted); letter-spacing: 0.15em;">Interfaz del Aplicativo — LiveOps Engine 3.0</p>
+                    <img src="stack/UI3.0.png" alt="LiveOps Engine UI" onerror="this.src='https://placehold.co/800x450?text=UI+3.0'" style="width:100%; border-radius:12px; box-shadow: var(--shadow-md);">
+                    <p class="text-xs" style="color: var(--text-muted);">Selecciona una capa del panel izquierdo para explorar la arquitectura del proyecto</p>
+                </div>
             </div>
         </div>
 
@@ -478,7 +591,7 @@
         </div>
 
         <!-- HEADER EJECUTIVO -->
-        <div class="flex justify-between items-end mb-10 border-b pb-6">
+        <div id="performance" class="scroll-anchor flex justify-between items-end mb-10 border-b pb-6">
             <div>
                 <h1 class="text-4xl font-800 tracking-tighter">LiveOps <span class="peya-red">Engine</span> Performance</h1>
                 <p class="text-slate-500 uppercase text-xs font-bold tracking-[0.2em] mt-2">Automation 3rd Layer | Data 2025</p>
