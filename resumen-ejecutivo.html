@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveOps Engine — Resumen Ejecutivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           LIVEOPS ENGINE — DESIGN SYSTEM
+        ======================================== */
+        :root {
+            --peya-red: #E21B23;
+            --peya-bg-red: #E21B23;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.04);
+            --shadow-lg: 0 15px 40px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        body.dark-mode {
+            --peya-red: #FF3D45;
+            --peya-bg-red: #FF3D45;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --border-color: #475569;
+            --border-light: #334155;
+            --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.3);
+            --shadow-lg: 0 15px 40px rgba(0,0,0,0.4);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            padding: 2.5rem;
+        }
+
+        body.dark-mode * {
+            transition-property: background-color, border-color, color, box-shadow;
+            transition-duration: 0.3s;
+            transition-timing-function: ease;
+        }
+
+        .peya-red { color: var(--peya-red); }
+        .peya-bg-red { background-color: var(--peya-bg-red); }
+
+        /* ---- CARD ---- */
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* ---- THEME TOGGLE ---- */
+        .theme-toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-secondary);
+            padding: 10px 16px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            user-select: none;
+        }
+        .theme-toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: var(--border-color);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+        .theme-toggle-switch.dark { background: var(--peya-red); }
+        .theme-toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .theme-toggle-switch.dark::after { left: 24px; }
+        .theme-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+            transition: opacity 0.3s ease;
+        }
+
+        /* ---- SECTION DIVIDER ---- */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        /* ---- INITIATIVE NUMBER ---- */
+        .initiative-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--peya-red);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* ---- PROBLEM / SOLUTION SPLIT ---- */
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .split-grid { grid-template-columns: 1fr; }
+            body { padding: 1rem; }
+        }
+
+        .problem-block {
+            background: var(--bg-tertiary);
+            border-left: 4px solid #94a3b8;
+            border-radius: 0 12px 12px 0;
+            padding: 1.5rem;
+        }
+        .solution-block {
+            background: rgba(226, 27, 35, 0.04);
+            border-left: 4px solid var(--peya-red);
+            border-radius: 0 12px 12px 0;
+            padding: 1.5rem;
+        }
+        body.dark-mode .solution-block {
+            background: rgba(255, 61, 69, 0.07);
+        }
+
+        .block-label {
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.75rem;
+        }
+        .problem-block .block-label { color: #94a3b8; }
+        .solution-block .block-label { color: var(--peya-red); }
+
+        /* ---- WEAKNESS PILL ---- */
+        .weakness-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(148,163,184,0.12);
+            border: 1px solid rgba(148,163,184,0.3);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 3px 3px 3px 0;
+        }
+        .weakness-pill::before {
+            content: '✕';
+            font-size: 9px;
+            color: #94a3b8;
+        }
+        .strength-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(226,27,35,0.06);
+            border: 1px solid rgba(226,27,35,0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--peya-red);
+            margin: 3px 3px 3px 0;
+        }
+        .strength-pill::before {
+            content: '✓';
+            font-size: 9px;
+            color: var(--peya-red);
+        }
+
+        /* ---- KPI BUBBLE ---- */
+        .kpi-bubble {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease;
+        }
+        .kpi-bubble:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+        /* ---- BADGE ---- */
+        .badge {
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            display: inline-block;
+            letter-spacing: 0.07em;
+        }
+
+        /* ---- TAG CHIP ---- */
+        .tag-chip {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tag-chip:hover {
+            border-color: var(--peya-red);
+            color: var(--peya-red);
+            background: rgba(226,27,35,0.04);
+        }
+
+        /* ---- SCALABILITY CARDS ---- */
+        .scale-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }
+        .scale-card:hover {
+            border-color: var(--peya-red);
+            box-shadow: var(--shadow-md);
+            transform: translateX(3px);
+        }
+        .scale-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .scale-dot.active {
+            background: #10b981;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+            animation: pulse-dot 2s infinite;
+        }
+        .scale-dot.exploratory {
+            background: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245,158,11,0.2);
+        }
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+            50% { box-shadow: 0 0 0 6px rgba(16,185,129,0.1); }
+        }
+
+        /* ---- PROJECT INTRO ---- */
+        .intro-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 1.5rem;
+            text-align: center;
+        }
+        .intro-stat-divider {
+            width: 1px;
+            background: var(--border-color);
+            align-self: stretch;
+        }
+
+        /* ---- PROCESS STEP ---- */
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+        .process-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .process-step:hover .process-icon {
+            border-color: var(--peya-red);
+            background: rgba(226,27,35,0.05);
+        }
+        .process-arrow {
+            color: var(--peya-red);
+            font-size: 18px;
+            font-weight: 900;
+            opacity: 0.5;
+            flex-shrink: 0;
+            align-self: flex-start;
+            margin-top: 12px;
+        }
+
+        /* ---- SECTION LABEL ---- */
+        .section-eyebrow {
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ---- INITIATIVE HEADER BAR ---- */
+        .initiative-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ---- DARK MODE OVERRIDES ---- */
+        body.dark-mode .problem-block {
+            background: rgba(51,65,85,0.4);
+        }
+        body.dark-mode .kpi-bubble {
+            background: var(--bg-tertiary);
+        }
+        body.dark-mode .scale-card {
+            background: var(--bg-secondary);
+        }
+        body.dark-mode .intro-stat-divider {
+            background: var(--border-color);
+        }
+        body.dark-mode .process-icon {
+            background: var(--bg-tertiary);
+        }
+        body.dark-mode .weakness-pill {
+            background: rgba(71,85,105,0.3);
+            border-color: rgba(71,85,105,0.5);
+        }
+
+        /* ---- BACK LINK ---- */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--peya-red); }
+
+        /* ---- GRADIENT ACCENT ---- */
+        .red-accent-line {
+            height: 3px;
+            background: linear-gradient(90deg, var(--peya-red) 0%, transparent 100%);
+            border-radius: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ---- FOOTER ---- */
+        .footer-bar {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ---- ANIMATE IN ---- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            animation: fadeUp 0.5s ease both;
+        }
+        .animate-in-d1 { animation-delay: 0.05s; }
+        .animate-in-d2 { animation-delay: 0.12s; }
+        .animate-in-d3 { animation-delay: 0.2s; }
+        .animate-in-d4 { animation-delay: 0.28s; }
+        .animate-in-d5 { animation-delay: 0.36s; }
+        .animate-in-d6 { animation-delay: 0.44s; }
+    </style>
+</head>
+<body class="p-10">
+
+    <!-- THEME TOGGLE -->
+    <div class="theme-toggle-container">
+        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <button class="theme-toggle-switch" id="themeToggle" aria-label="Toggle theme"></button>
+        <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <span class="theme-toggle-label" id="themeLabel">Light</span>
+    </div>
+
+    <div class="max-w-6xl mx-auto">
+
+        <!-- ═══════════════════════════════════════════
+             HEADER
+        ════════════════════════════════════════════ -->
+        <div class="animate-in">
+            <a href="index.html" class="back-link mb-6 inline-flex">
+                ← Volver al Dashboard Principal
+            </a>
+            <div class="flex justify-between items-end mb-10 border-b pb-6" style="border-color: var(--border-color)">
+                <div>
+                    <h1 class="text-4xl font-black tracking-tighter">LiveOps <span class="peya-red">Engine</span></h1>
+                    <p class="section-eyebrow mt-2">Resumen Ejecutivo · Automation Intelligence · AI Challenge</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════
+             INTRO + KPIs
+        ════════════════════════════════════════════ -->
+        <div class="card mb-8 border-t-8 border-t-red-600 animate-in animate-in-d1">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="badge" style="background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3);">✓ Documentado</span>
+                <span class="badge" style="background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3);">✓ Seguro</span>
+                <span class="badge" style="background: rgba(168,85,247,0.1); color: #a855f7; border: 1px solid rgba(168,85,247,0.3);">✓ Desarrollo local</span>
+            </div>
+            <h2 class="text-2xl font-black tracking-tight mb-4" style="color: var(--text-primary)">
+                Una herramienta construida por el equipo, para el equipo
+            </h2>
+            <p class="text-base leading-relaxed mb-3" style="color: var(--text-secondary)">
+                LiveOps Engine es una aplicación de escritorio desarrollada internamente por el equipo de LiveOps Chile. Su propósito es simple: <strong style="color: var(--text-primary)">eliminar el trabajo manual, repetitivo y de bajo valor</strong> para que el equipo pueda enfocarse en lo que realmente importa.
+            </p>
+            <p class="text-base leading-relaxed" style="color: var(--text-secondary)">
+                No reemplaza los sistemas existentes — los potencia. Opera de forma <strong style="color: var(--text-primary)">silenciosa, segura y trazable</strong>, sobre las plataformas que el equipo ya usa. Es un proyecto propio, documentado y con capacidad de seguir creciendo.
+            </p>
+        </div>
+
+
+        <!-- ═══════════════════════════════════════════
+             SECCIÓN: INICIATIVAS
+        ════════════════════════════════════════════ -->
+        <div class="section-header animate-in animate-in-d2">
+            <div>
+                <h1 class="text-3xl font-black tracking-tighter">Iniciativas <span class="peya-red">Implementadas</span></h1>
+                <p class="section-eyebrow mt-1">Problemas reales · Soluciones reales · Impacto medible</p>
+            </div>
+        </div>
+
+
+        <!-- ────────────────────────────────────────────
+             INICIATIVA 01 — GESTIÓN STAGNANT
+        ──────────────────────────────────────────── -->
+        <div class="card mb-6 animate-in animate-in-d3">
+            <div class="initiative-bar">
+                <div class="initiative-number">01</div>
+                <div>
+                    <h3 class="text-xl font-black tracking-tight" style="color: var(--text-primary)">Automatización de Gestión Stagnant</h3>
+                    <p class="section-eyebrow">De la revisión manual orden por orden, a la intervención automática y proactiva</p>
+                </div>
+            </div>
+
+            <!-- ANTES: FLUJO MANUAL -->
+            <div class="mb-5">
+                <p class="text-xs font-bold uppercase mb-3" style="color: var(--text-muted); letter-spacing: 0.12em;">Antes — El proceso manual, paso a paso</p>
+                <div class="flex flex-wrap items-start gap-2">
+                    <div class="process-step">
+                        <div class="process-icon">👁️</div>
+                        <p class="text-center" style="font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Escaneo<br>visual</p>
+                    </div>
+                    <div class="process-arrow">›</div>
+                    <div class="process-step">
+                        <div class="process-icon">🖱️</div>
+                        <p class="text-center" style="font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Scroll<br>continuo</p>
+                    </div>
+                    <div class="process-arrow">›</div>
+                    <div class="process-step">
+                        <div class="process-icon">📂</div>
+                        <p class="text-center" style="font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Apertura<br>una a una</p>
+                    </div>
+                    <div class="process-arrow">›</div>
+                    <div class="process-step">
+                        <div class="process-icon">🔍</div>
+                        <p class="text-center" style="font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Análisis<br>y verificación</p>
+                    </div>
+                    <div class="process-arrow">›</div>
+                    <div class="process-step">
+                        <div class="process-icon">✋</div>
+                        <p class="text-center" style="font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Accionamiento<br>manual</p>
+                    </div>
+                    <div class="process-arrow">›</div>
+                    <div class="process-step">
+                        <div class="process-icon">🔄</div>
+                        <p class="text-center" style="font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">Repetir<br>sin fin</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="red-accent-line" style="width: 60px;"></div>
+
+            <div class="split-grid">
+                <!-- PROBLEMA -->
+                <div class="problem-block">
+                    <p class="block-label">⚠ Problemática</p>
+                    <p class="text-sm leading-relaxed mb-4" style="color: var(--text-secondary)">
+                        Gestionar órdenes stagnant era un trabajo manual y continuo. El agente debía revisar visualmente la herramienta, abrir cada orden, analizar el caso y tomar acción — una por una, durante todo el turno.
+                    </p>
+                    <div class="flex flex-wrap mb-2">
+                        <span class="weakness-pill">Gestión 100% reactiva</span>
+                        <span class="weakness-pill">Fraccionaba la atención del equipo</span>
+                        <span class="weakness-pill">Desgaste cognitivo y fatiga visual</span>
+                        <span class="weakness-pill">Mayor probabilidad de errores</span>
+                        <span class="weakness-pill">Capacidad limitada por turno</span>
+                    </div>
+                    <p class="text-xs mt-3" style="color: var(--text-muted); line-height: 1.6;">
+                        Mientras el equipo estaba enfocado en esto, otros focos igual de importantes —como delay, saturación o comunicación con partners— quedaban en segundo plano.
+                    </p>
+                </div>
+
+                <!-- SOLUCIÓN -->
+                <div class="solution-block">
+                    <p class="block-label">✦ Solución</p>
+                    <p class="text-sm leading-relaxed mb-4" style="color: var(--text-secondary)">
+                        El Engine detecta y gestiona las órdenes de forma automática, en el momento exacto que se configure. Ya no se reacciona: se anticipa.
+                    </p>
+                    <div class="flex flex-wrap mb-2">
+                        <span class="strength-pill">Gestión proactiva y sin intervención</span>
+                        <span class="strength-pill">Criterio estandarizado y validado</span>
+                        <span class="strength-pill">Sin errores de criterio</span>
+                        <span class="strength-pill">Opera silenciosamente en segundo plano</span>
+                        <span class="strength-pill">Trazable y documentado</span>
+                    </div>
+                    <p class="text-xs mt-3" style="color: var(--text-secondary); line-height: 1.6;">
+                        Cada orden se evalúa contra una <strong style="color: var(--peya-red)">Matriz de Decisión validada con el equipo Regional</strong>: estado, tiempo estancada, distancia del rider, tipo de vehículo, si hay pedidos apilados, si el local confirmó el pedido, zona, entre otros. El Engine determina la acción correcta y la ejecuta — sin que el equipo tenga que intervenir.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ICE CONTEXT -->
+            <div class="mt-5 p-4 rounded-xl" style="background: var(--bg-tertiary); border: 1px solid var(--border-color);">
+                <p class="text-xs font-black uppercase mb-2" style="color: var(--text-muted); letter-spacing: 0.12em;">Contexto — ¿Por qué el Engine y no el sistema automático?</p>
+                <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">
+                    PedidosYa cuenta con <strong style="color: var(--text-primary);">ICE</strong>, un sistema corporativo que acciona reglas automáticas sobre la operación. El Engine no compite con ICE — <strong style="color: var(--text-primary);">actúa donde ICE no llega</strong>: en los casos que el sistema no captura con suficiente precisión o que requieren un criterio más contextual. Además, el trabajo de análisis del Engine genera el <strong style="color: var(--text-primary);">business case necesario para mejorar las propias configuraciones de ICE</strong>, retroalimentando la solución de fondo a nivel regional.
+                </p>
+            </div>
+
+            <!-- RESULTADOS -->
+            <div class="mt-5">
+                <p class="text-xs font-black uppercase mb-3" style="color: var(--text-muted); letter-spacing: 0.12em;">Resultados</p>
+
+                <!-- FAIL RATE HIGHLIGHT -->
+                <div class="mb-4 p-4 rounded-xl" style="background: rgba(226,27,35,0.04); border: 1px solid rgba(226,27,35,0.15);">
+                    <p class="text-xs font-bold mb-3" style="color: var(--peya-red);">📉 Impacto en Fail Rate — Órdenes Accepted (+35 min)</p>
+                    <p class="text-xs mb-3" style="color: var(--text-muted); line-height: 1.6;">
+                        Las órdenes en estado <strong style="color: var(--text-primary);">Accepted</strong> por más de 35 minutos son un punto crítico que ICE no capturaba con eficiencia. La intervención proactiva del Engine demostró un impacto directo en la tasa de cancelación:
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="text-center flex-1 p-3 rounded-lg" style="background: var(--bg-tertiary);">
+                            <p class="text-xs font-black uppercase mb-1" style="color: var(--text-muted); letter-spacing: 0.1em;">Sin gestión</p>
+                            <p class="text-3xl font-black" style="color: #94a3b8;">21.8<span style="font-size: 1rem;">%</span></p>
+                            <p class="text-xs mt-1" style="color: var(--text-muted);">Fail Rate</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                            <span style="font-size: 22px; color: var(--peya-red); font-weight: 900;">→</span>
+                        </div>
+                        <div class="text-center flex-1 p-3 rounded-lg" style="background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.2);">
+                            <p class="text-xs font-black uppercase mb-1" style="color: #10b981; letter-spacing: 0.1em;">Con gestión LiveOps</p>
+                            <p class="text-3xl font-black" style="color: #10b981;">11.8<span style="font-size: 1rem;">%</span></p>
+                            <p class="text-xs mt-1" style="color: var(--text-muted);">Fail Rate</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                            <span style="font-size: 22px; color: #10b981; font-weight: 900;">⇢</span>
+                        </div>
+                        <div class="text-center flex-1 p-3 rounded-lg" style="background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.2);">
+                            <p class="text-xs font-black uppercase mb-1" style="color: #10b981; letter-spacing: 0.1em;">Reducción</p>
+                            <p class="text-3xl font-black" style="color: #10b981;">-10<span style="font-size: 1rem;">pp</span></p>
+                            <p class="text-xs mt-1" style="color: var(--text-muted);">en Fail Rate</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI ROW -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="kpi-bubble">
+                        <p class="text-3xl font-black peya-red">47k+</p>
+                        <p class="text-xs font-bold uppercase mt-1" style="color: var(--text-muted); letter-spacing: 0.1em;">Órdenes Gestionadas</p>
+                    </div>
+                    <div class="kpi-bubble">
+                        <p class="text-3xl font-black" style="color: #10b981;">88%</p>
+                        <p class="text-xs font-bold uppercase mt-1" style="color: var(--text-muted); letter-spacing: 0.1em;">Gestión Autónoma</p>
+                    </div>
+                    <div class="kpi-bubble">
+                        <p class="text-3xl font-black" style="color: #3b82f6;">89%</p>
+                        <p class="text-xs font-bold uppercase mt-1" style="color: var(--text-muted); letter-spacing: 0.1em;">Efectividad Q4</p>
+                    </div>
+                    <div class="kpi-bubble" style="background: rgba(226,27,35,0.04); border-color: rgba(226,27,35,0.2);">
+                        <p class="text-lg font-black peya-red">1 mes =</p>
+                        <p class="text-xs font-black mt-1" style="color: var(--text-primary);">1 año de trabajo manual previo</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ────────────────────────────────────────────
+             INICIATIVA 02 — REPORTING EN TIEMPO REAL
+        ──────────────────────────────────────────── -->
+        <div class="card mb-8 animate-in animate-in-d4">
+            <div class="initiative-bar">
+                <div class="initiative-number">02</div>
+                <div>
+                    <h3 class="text-xl font-black tracking-tight" style="color: var(--text-primary)">Reporting Operacional en Tiempo Real</h3>
+                    <p class="section-eyebrow">De 10 minutos de trabajo manual a menos de 30 segundos, con un clic</p>
+                </div>
+            </div>
+
+            <!-- TIME COMPARISON -->
+            <div class="flex items-center gap-4 mb-6 p-4 rounded-xl" style="background: var(--bg-tertiary); border: 1px solid var(--border-color);">
+                <div class="text-center flex-1">
+                    <p class="text-xs font-black uppercase mb-1" style="color: var(--text-muted); letter-spacing: 0.1em;">Antes</p>
+                    <p class="text-4xl font-black" style="color: #94a3b8;">~10 <span style="font-size: 1rem;">min</span></p>
+                    <p class="text-xs mt-1" style="color: var(--text-muted);">por reporte manual</p>
+                </div>
+                <div style="display: flex; align-items: center; flex-direction: column; gap: 4px;">
+                    <div style="width: 1px; height: 30px; background: var(--border-color);"></div>
+                    <span style="font-size: 18px; color: var(--peya-red);">→</span>
+                    <div style="width: 1px; height: 30px; background: var(--border-color);"></div>
+                </div>
+                <div class="text-center flex-1">
+                    <p class="text-xs font-black uppercase mb-1" style="color: var(--peya-red); letter-spacing: 0.1em;">Hoy</p>
+                    <p class="text-4xl font-black peya-red">&lt;30 <span style="font-size: 1rem;">seg</span></p>
+                    <p class="text-xs mt-1" style="color: var(--text-muted);">extracción + proceso + alerta</p>
+                </div>
+                <div style="display: flex; align-items: center; flex-direction: column; gap: 4px;">
+                    <div style="width: 1px; height: 30px; background: var(--border-color);"></div>
+                    <span style="font-size: 18px; color: #10b981;">⇢</span>
+                    <div style="width: 1px; height: 30px; background: var(--border-color);"></div>
+                </div>
+                <div class="text-center flex-1">
+                    <p class="text-xs font-black uppercase mb-1" style="color: #10b981; letter-spacing: 0.1em;">Reducción</p>
+                    <p class="text-4xl font-black" style="color: #10b981;">95%</p>
+                    <p class="text-xs mt-1" style="color: var(--text-muted);">menos tiempo invertido</p>
+                </div>
+            </div>
+
+            <div class="red-accent-line" style="width: 60px;"></div>
+
+            <div class="split-grid">
+                <!-- PROBLEMA -->
+                <div class="problem-block">
+                    <p class="block-label">⚠ Problemática</p>
+                    <p class="text-sm leading-relaxed mb-4" style="color: var(--text-secondary)">
+                        Hurrier es la herramienta central de monitoreo de LiveOps. Pero toda la información que entrega quedaba atrapada en una pantalla — para convertirla en un reporte había que hacerlo a mano.
+                    </p>
+                    <div class="flex flex-wrap mb-2">
+                        <span class="weakness-pill">Sin alertas automáticas</span>
+                        <span class="weakness-pill">~10 minutos por reporte</span>
+                        <span class="weakness-pill">Proceso repetido múltiples veces por turno</span>
+                        <span class="weakness-pill">Reacción tardía ante desviaciones</span>
+                    </div>
+                    <p class="text-xs mt-3" style="color: var(--text-muted); line-height: 1.6;">
+                        Extraer los datos, procesarlos y armar el reporte para enviarlo a Slack podía tomar hasta 10 minutos — un costo alto para algo que el equipo necesita de forma frecuente y urgente durante la operación.
+                    </p>
+                </div>
+
+                <!-- SOLUCIÓN -->
+                <div class="solution-block">
+                    <p class="block-label">✦ Solución</p>
+                    <p class="text-sm leading-relaxed mb-4" style="color: var(--text-secondary)">
+                        El Engine extrae la data de Hurrier, la procesa y envía las alertas a Slack en menos de 30 segundos. Todo con un clic.
+                    </p>
+                    <div class="flex flex-wrap mb-2">
+                        <span class="strength-pill">Métricas de saturación operacional</span>
+                        <span class="strength-pill">Análisis de ineficiencias de flota</span>
+                        <span class="strength-pill">Revisión de órdenes activas</span>
+                        <span class="strength-pill">Alertas accionables en Slack</span>
+                        <span class="strength-pill">Decisiones más rápidas ante desviaciones</span>
+                    </div>
+                    <p class="text-xs mt-3" style="color: var(--text-secondary); line-height: 1.6;">
+                        En tiempo real, el equipo puede ver el nivel de saturación, detectar ineficiencias y revisar el estado de las órdenes activas. Esto facilita la gestión del delay y permite reaccionar ante cualquier desviación de forma inmediata — sin perder tiempo construyendo el reporte.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ═══════════════════════════════════════════
+             SECCIÓN: ESCALABILIDAD
+        ════════════════════════════════════════════ -->
+        <div class="section-header animate-in animate-in-d5">
+            <div>
+                <h1 class="text-3xl font-black tracking-tighter">Escalabilidad y <span class="peya-red">Nuevos Usos</span></h1>
+                <p class="section-eyebrow mt-1">Una base que se expande · Integración rápida · Impacto comprobado</p>
+            </div>
+        </div>
+
+        <div class="card animate-in animate-in-d5" style="border-top: 8px solid var(--peya-red);">
+            <div class="mb-6">
+                <p class="text-base leading-relaxed mb-3" style="color: var(--text-secondary);">
+                    Todo lo construido —la lógica de automatización, la integración con las plataformas, la documentación del negocio— funciona hoy como una <strong style="color: var(--text-primary);">base de conocimiento operacional</strong> que se puede entregar a una IA (agente o chatbot) para diseñar, prototipar e implementar nuevos casos de uso de forma mucho más rápida y robusta.
+                </p>
+                <p class="text-base leading-relaxed" style="color: var(--text-secondary);">
+                    Esto significa que cada nueva automatización no parte de cero: ya tiene contexto, ya tiene acceso a los sistemas, y ya tiene un marco de validación probado. <strong style="color: var(--text-primary);">El Engine no es una solución puntual — es una plataforma en crecimiento.</strong>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- ACTIVOS -->
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="scale-dot active"></div>
+                        <p class="text-xs font-black uppercase" style="color: #10b981; letter-spacing: 0.15em;">Funcionando en Producción</p>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <div class="scale-card">
+                            <div class="scale-dot active"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Alertas de Saturación Dmart</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Detecta cuando un Dmart alcanza niveles críticos de saturación y alerta al equipo para ejecutar HDM a tiempo.</p>
+                            </div>
+                        </div>
+                        <div class="scale-card">
+                            <div class="scale-dot active"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Alertas de VFR — Integraciones Food</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Monitorea el Vendor Fail Rate: cancelaciones por problemas operativos de locales o caídas de integración, con alertas accionables en Slack.</p>
+                            </div>
+                        </div>
+                        <div class="scale-card">
+                            <div class="scale-dot active"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Alertas de Conectividad — Piloto Dunkin Donuts</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Detecta en tiempo real locales cerrados por problemas de check-in o caídas de conexión, permitiendo reacción inmediata.</p>
+                            </div>
+                        </div>
+                        <div class="scale-card">
+                            <div class="scale-dot active"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Envío de Push Masivo a Flota</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Comunicaciones a riders segmentadas por ciudad y estado, enviadas con un solo clic desde la herramienta.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EXPLORATORIOS -->
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="scale-dot exploratory"></div>
+                        <p class="text-xs font-black uppercase" style="color: #f59e0b; letter-spacing: 0.15em;">En Exploración Activa</p>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <div class="scale-card">
+                            <div class="scale-dot exploratory"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Activación Inteligente de Eventos en DAS</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Automatización del seteo de eventos de reducción de oferta de partners ante quiebres de servicio, sin intervención manual.</p>
+                            </div>
+                        </div>
+                        <div class="scale-card">
+                            <div class="scale-dot exploratory"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Alertas de Lluvia en Tiempo Real</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Scraping de pronósticos del tiempo para anticipar picos de demanda y planificar cobertura de flota por ciudad, día y hora.</p>
+                            </div>
+                        </div>
+                        <div class="scale-card">
+                            <div class="scale-dot exploratory"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Seteo Automático de Incentivos</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Configuración automática de reglas de incentivos (quests) para incentivar la conexión de flota según condiciones de oferta y demanda.</p>
+                            </div>
+                        </div>
+                        <div class="scale-card">
+                            <div class="scale-dot exploratory"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Ejecución Automática HDM Dmart</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Cierra el ciclo completo: de la alerta de saturación a la ejecución autónoma del accionable, sin intervención del equipo.</p>
+                            </div>
+                        </div>
+                        <div class="scale-card">
+                            <div class="scale-dot exploratory"></div>
+                            <div>
+                                <p class="text-sm font-bold" style="color: var(--text-primary);">Scraping Benchmark Competencia</p>
+                                <p class="text-xs" style="color: var(--text-muted);">Extracción automatizada de delivery fee y service fee de Uber Eats para monitoreo de precios y análisis competitivo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CIERRE ARGUMENTAL -->
+            <div class="mt-6 p-5 rounded-2xl" style="background: rgba(226,27,35,0.04); border: 1px solid rgba(226,27,35,0.15);">
+                <p class="text-sm font-bold mb-1" style="color: var(--peya-red);">↳ La arquitectura como ventaja competitiva interna</p>
+                <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">
+                    Cada nuevo caso de uso hereda la base ya construida: integración con los sistemas operativos, autenticación segura, pipeline de datos y conexión con Slack. Esto reduce drásticamente el tiempo de desarrollo y prueba de nuevas automatizaciones. Lo que antes requería meses de desarrollo, hoy puede prototipase en días.
+                </p>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer-bar animate-in animate-in-d6">
+            <div>
+                <p class="text-xs font-black uppercase tracking-widest" style="color: var(--text-muted);">LiveOps Engine · AI3 Layer · Chile 2025</p>
+                <p class="text-xs mt-1" style="color: var(--text-muted);">Desarrollado localmente · Arquitectura documentada · Principios SOLID</p>
+            </div>
+            <div class="text-right">
+                <p class="text-xs font-bold" style="color: var(--text-muted);">Presentado a M-Level</p>
+                <p class="text-xs peya-red font-black">LiveOps Chile · 2025</p>
+            </div>
+        </div>
+
+    </div><!-- /max-w-6xl -->
+
+    <script>
+        // THEME TOGGLE
+        const toggle = document.getElementById('themeToggle');
+        const label = document.getElementById('themeLabel');
+        const saved = localStorage.getItem('theme') || 'light';
+        if (saved === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggle.classList.add('dark');
+            label.textContent = 'Dark';
+        }
+        toggle.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-mode');
+            toggle.classList.toggle('dark', isDark);
+            label.textContent = isDark ? 'Dark' : 'Light';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // SCROLL REVEAL
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.08 });
+
+        document.querySelectorAll('.card, .section-header').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(18px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
